@@ -29,14 +29,13 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         try{
-            $user = Auth::user();
-            return redirect('/'.$user->role.'/dashboard');
+            return redirect('/'.Auth::user()->role.'/dashboard');
         } catch (\Throwable $th) {
             return redirect('/')->with('error',$th->getMessage());
         }
     }
 
-    public function changePassword(Request $request) 
+    public function password(Request $request) 
     {
         try{
             $validater=Validator::make($request->all(),[
@@ -59,9 +58,32 @@ class HomeController extends Controller
             } else{
                 return back()->with("error","Old password not matched");
             }
-            return redirect()->route(''.$user->role.'.dashboard')->with(['success'=>'password has been updated successfully']);
+            return redirect()->route(''.$user->role.'.dashboard')->with(['success'=>'Password has been updated successfully.']);
         } catch (\Throwable $th) {
             return back()->with('error',$th->getMessage());
+        }
+    }
+
+    public function profile(Request $request){
+        try{
+            $Valid = [
+                'name' => 'required',
+                'email' => 'required|email|unique:users,email,'.Auth::user()->id
+            ];
+            $validator = Validator::make($request->all(), $Valid);
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
+
+            $user = User::find(Auth::user()->id);
+            $user->name = is_null($request->name) ? "" : $request->name;
+            $user->email = is_null($request->email) ? "" : $request->email;
+            $user->save();
+            
+            return redirect()->route(''.$user->role.'.dashboard')->with('success', 'Profile has been updated successfully.');
+
+        } catch (\Throwable $th) {
+            return redirect('/'.Auth::user()->role.'')->with('error',$th->getMessage());
         }
     }
 }

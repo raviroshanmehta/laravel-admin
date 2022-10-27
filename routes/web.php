@@ -17,14 +17,15 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {  return view('welcome'); });
-
 Auth::routes(['register' => false]);
 
-Route::get('/home', [HomeController::class, 'index'])->middleware(['auth'])->name('dashboard');
-Route::post('/password-update', [HomeController::class, 'changePassword'])->middleware(['auth'])->name('password.update');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
+    Route::post('/password', [HomeController::class, 'password'])->name('password.update');
+    Route::post('/profile', [HomeController::class, 'profile'])->name('profile.update');
+});
 Route::prefix('superadmin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('superadmin.dashboard');
-
     Route::get('/admins', [SuperAdminController::class, 'admins'])->name('superadmin.admins');
     Route::post('/admins/add', [SuperAdminController::class, 'admin'])->name('superadmin.admins.add.post');
     Route::get('/admins/add', [SuperAdminController::class, 'admin'])->name('superadmin.admins.add');
@@ -32,7 +33,6 @@ Route::prefix('superadmin')->middleware(['auth'])->group(function () {
 });
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
     Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
     Route::post('/users/add', [AdminController::class, 'user'])->name('admin.users.add.post');
     Route::get('/users/add', [AdminController::class, 'user'])->name('admin.users.add');

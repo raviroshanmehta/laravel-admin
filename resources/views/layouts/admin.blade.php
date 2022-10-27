@@ -25,7 +25,7 @@
                 <div class="topbar-left">
                     <a href="{{route(''.auth()->user()->role.'.dashboard')}}" class="logo">
                         <span class="logo-light">
-                            <i class="mdi mdi-camera-control"></i> ACH
+                            <i class="mdi mdi-camera-control"></i> Admin Panel <i></i> 
                         </span>
                         <span class="logo-sm">
                             <i class="mdi mdi-camera-control"></i>
@@ -38,11 +38,12 @@
                         <li class="dropdown notification-list list-inline-item">
                             <div class="dropdown notification-list nav-pro-img">
                                 <a class="dropdown-toggle nav-link arrow-none nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                                    <img src="/assets/images/users/user-4.jpg" alt="user" class="rounded-circle">
+                                    <img src="/assets/images/favicon.ico" alt="user" class="rounded-circle">
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                                     <!-- item-->
                                     <a href="javascript:;" class="dropdown-item" data-toggle="modal" data-target="#changePass"><i class="mdi mdi-lock"></i>Change Password</a>
+                                    <a href="javascript:;" class="dropdown-item" data-toggle="modal" data-target="#updateProfile"><i class="mdi mdi-account"></i>Update Profile</a>
                                     <a class="dropdown-item text-danger" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                         document.getElementById('logout-form').submit();"><i class="mdi mdi-power text-danger"></i> Logout</a>
@@ -151,6 +152,31 @@
 				</div>
 			</div>
 		</div>
+        <div class="modal fade" id="updateProfile" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Update Profile</h4>
+					</div>
+					<div class="modal-body">
+						<form action="{{ route('profile.update') }}" method="post">
+							@csrf
+							<label for="">Name</label>
+							<input type="text" name="name" class="form-control" value="{{ auth()->user()->name }}">
+							<label for="">Email</label>
+							<input type="text" name="email" class="form-control" value="{{ auth()->user()->email }}">
+                            <br>
+							<button type="submit" class="btn btn-sm btn-primary mt-2">Update</button>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 		<script src="{{asset('assets/js/jquery.min.js')}}"></script>

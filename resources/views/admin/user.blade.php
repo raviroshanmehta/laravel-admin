@@ -75,8 +75,8 @@
                         <label for="example-text-input" class="col-sm-2 col-form-label">Status</label>
                         <div class="col-sm-10">
                             <select class="form-control"id="example-text-input" name="status">
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="active" @if($user && $user->status == 'active') selected @endif >Active</option>
+                                <option value="inactive" @if($user && $user->status == 'inactive') selected @endif>Inactive</option>
                             </select>
                         </div>
                     </div>
